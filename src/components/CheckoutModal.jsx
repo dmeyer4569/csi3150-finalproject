@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { calcPricing } from '../pricing';
 
 const EMPTY_FORM = { name: '', email: '', address: '', card: '', expiry: '', cvv: '' };
 
@@ -7,12 +8,6 @@ const DISCOUNT_CODES = {
   'OAKLAND20':  { type: 'percent', value: 20,  label: '20% off' },
   'BALLERZ26': { type: 'percent', value: 67,  label: '67% off' },
 };
-
-function applyDiscount(subtotal, discount) {
-  if (!discount) return subtotal;
-  if (discount.type === 'percent') return subtotal * (1 - discount.value / 100);
-  return Math.max(0, subtotal - discount.value);
-}
 
 function CheckoutModal({ cart, onConfirm, onClose }) {
   const [fields, setFields] = useState(EMPTY_FORM);
@@ -23,9 +18,7 @@ function CheckoutModal({ cart, onConfirm, onClose }) {
   const [discount, setDiscount] = useState(null);
   const [codeError, setCodeError] = useState('');
 
-  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const total = applyDiscount(subtotal, discount);
-  const savings = subtotal - total;
+  const { subtotal, savings, tax, total } = calcPricing(cart, discount);
 
   function applyCode() {
     const code = codeInput.trim().toUpperCase();
@@ -94,12 +87,22 @@ function CheckoutModal({ cart, onConfirm, onClose }) {
                 </div>
               ))}
 
+              <div className="checkout-summary-row checkout-summary-subtotal">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+
               {discount && (
                 <div className="checkout-summary-row checkout-summary-discount">
                   <span>Discount ({discount.code} — {discount.label})</span>
                   <span>−${savings.toFixed(2)}</span>
                 </div>
               )}
+
+              <div className="checkout-summary-row">
+                <span>Tax (8%)</span>
+                <span>${tax.toFixed(2)}</span>
+              </div>
 
               <div className="checkout-summary-total">
                 <span>Total</span>

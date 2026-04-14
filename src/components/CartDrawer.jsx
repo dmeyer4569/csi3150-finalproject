@@ -1,7 +1,8 @@
 import React from 'react';
+import { calcPricing } from '../pricing';
 
 function CartDrawer({ cart, removeFromCart, onCheckout, onClose }) {
-  const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const { subtotal, tax, total } = calcPricing(cart);
 
   return (
     <div className="drawer-overlay" onClick={onClose}>
@@ -10,6 +11,7 @@ function CartDrawer({ cart, removeFromCart, onCheckout, onClose }) {
           <h2>Cart</h2>
           <button onClick={onClose}>✕</button>
         </div>
+
         {cart.length === 0 ? (
           <p className="drawer-empty">Your cart is empty.</p>
         ) : (
@@ -24,7 +26,22 @@ function CartDrawer({ cart, removeFromCart, onCheckout, onClose }) {
                 </li>
               ))}
             </ul>
-            <div className="cart-total">Total: ${total.toFixed(2)}</div>
+
+            <div className="cart-pricing">
+              <div className="cart-pricing-row">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="cart-pricing-row">
+                <span>Tax (8%)</span>
+                <span>${tax.toFixed(2)}</span>
+              </div>
+              <div className="cart-pricing-row cart-pricing-total">
+                <span>Total</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+            </div>
+
             <button className="cart-checkout-btn" onClick={onCheckout}>
               Checkout
             </button>
