@@ -87,13 +87,29 @@
   background: #fde8e8;
 }
 
-.cart-total {
+.cart-pricing {
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cart-pricing-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.cart-pricing-total {
   font-size: 1rem;
   font-weight: 700;
-  text-align: right;
+  color: #111;
+  padding-top: 0.4rem;
+  margin-top: 0.1rem;
+  border-top: 1px solid #eee;
 }
 
 /* ── Wishlist ──────────────────────────────────────────────────────────── */

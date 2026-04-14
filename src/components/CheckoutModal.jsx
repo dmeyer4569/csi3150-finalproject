@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { calcPricing } from '../pricing';
+import { calcPricing, TAX_RATE } from '../pricing';
 
 const EMPTY_FORM = { name: '', email: '', address: '', card: '', expiry: '', cvv: '' };
 
@@ -100,7 +100,7 @@ function CheckoutModal({ cart, onConfirm, onClose }) {
               )}
 
               <div className="checkout-summary-row">
-                <span>Tax (8%)</span>
+                <span>Tax ({TAX_RATE * 100}%)</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
 

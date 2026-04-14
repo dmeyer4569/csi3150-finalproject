@@ -1,5 +1,5 @@
-export const TAX_RATE = 0.08; // 8%
-
+export const TAX_RATE = 0.06; // 6% michigan sale tax, not dynamic
+ 
 export function calcPricing(cart, discount = null) {
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 

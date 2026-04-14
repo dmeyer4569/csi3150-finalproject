@@ -45,6 +45,12 @@
   margin-left: 0.25rem;
 }
 
+.checkout-summary-subtotal {
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
 .checkout-summary-total {
   display: flex;
   justify-content: space-between;
@@ -53,6 +59,94 @@
   padding-top: 0.5rem;
   margin-top: 0.25rem;
   border-top: 1px solid #e5e5e5;
+}
+
+/* ── Discount row in summary ───────────────────────────────────────────── */
+
+.checkout-summary-discount {
+  color: #16a34a;
+  font-weight: 500;
+}
+
+/* ── Discount code input ───────────────────────────────────────────────── */
+
+.checkout-discount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.checkout-discount-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.checkout-discount-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.checkout-discount-row input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s;
+  text-transform: uppercase;
+}
+
+.checkout-discount-row input:focus {
+  border-color: #2563eb;
+}
+
+.checkout-discount-row input.input-error {
+  border-color: #e03e3e;
+}
+
+.discount-apply-btn {
+  background: #f0f0f0;
+  color: #111;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.discount-apply-btn:hover {
+  background: #e0e0e0;
+}
+
+.checkout-discount-applied {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.discount-badge {
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+}
+
+.discount-remove-btn {
+  background: transparent;
+  color: #e03e3e;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.discount-remove-btn:hover {
+  background: #fde8e8;
+  border-radius: 4px;
 }
 
 /* ── Form ──────────────────────────────────────────────────────────────── */
