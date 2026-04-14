@@ -2,21 +2,56 @@ import React, { useState } from 'react';
 
 const EMPTY_FORM = { name: '', email: '', address: '', card: '', expiry: '', cvv: '' };
 
+const DISCOUNT_CODES = {
+  'OAKLAND10':  { type: 'percent', value: 10,  label: '10% off' },
+  'OAKLAND20':  { type: 'percent', value: 20,  label: '20% off' },
+  'BALLERZ26': { type: 'percent', value: 67,  label: '67% off' },
+};
+
+function applyDiscount(subtotal, discount) {
+  if (!discount) return subtotal;
+  if (discount.type === 'percent') return subtotal * (1 - discount.value / 100);
+  return Math.max(0, subtotal - discount.value);
+}
+
 function CheckoutModal({ cart, onConfirm, onClose }) {
   const [fields, setFields] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [confirmed, setConfirmed] = useState(false);
 
-  const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const [codeInput, setCodeInput] = useState('');
+  const [discount, setDiscount] = useState(null);
+  const [codeError, setCodeError] = useState('');
+
+  const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const total = applyDiscount(subtotal, discount);
+  const savings = subtotal - total;
+
+  function applyCode() {
+    const code = codeInput.trim().toUpperCase();
+    if (DISCOUNT_CODES[code]) {
+      setDiscount({ ...DISCOUNT_CODES[code], code });
+      setCodeError('');
+    } else {
+      setDiscount(null);
+      setCodeError('Invalid discount code.');
+    }
+  }
+
+  function removeCode() {
+    setDiscount(null);
+    setCodeInput('');
+    setCodeError('');
+  }
 
   function validate() {
     const e = {};
-    if (!fields.name.trim())                          e.name    = 'Name is required.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) e.email = 'Enter a valid email.';
-    if (!fields.address.trim())                       e.address = 'Address is required.';
-    if (!/^\d{16}$/.test(fields.card.replace(/\s/g, ''))) e.card = 'Enter a 16-digit card number.';
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(fields.expiry)) e.expiry = 'Enter expiry as MM/YY.';
-    if (!/^\d{3,4}$/.test(fields.cvv)) e.cvv = 'Enter a 3 or 4 digit security code.';
+    if (!fields.name.trim())                                   e.name   = 'Name is required.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))     e.email  = 'Enter a valid email.';
+    if (!fields.address.trim())                                e.address = 'Address is required.';
+    if (!/^\d{16}$/.test(fields.card.replace(/\s/g, '')))     e.card   = 'Enter a 16-digit card number.';
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(fields.expiry))     e.expiry = 'Enter expiry as MM/YY.';
+    if (!/^\d{3,4}$/.test(fields.cvv))                        e.cvv    = 'Enter a 3 or 4 digit security code.';
     return e;
   }
 
@@ -50,6 +85,7 @@ function CheckoutModal({ cart, onConfirm, onClose }) {
           <>
             <h2>Checkout</h2>
 
+            {/* Order summary */}
             <div className="checkout-summary">
               {cart.map(({ product, quantity }) => (
                 <div key={product.id} className="checkout-summary-row">
@@ -57,12 +93,47 @@ function CheckoutModal({ cart, onConfirm, onClose }) {
                   <span>${(product.price * quantity).toFixed(2)}</span>
                 </div>
               ))}
+
+              {discount && (
+                <div className="checkout-summary-row checkout-summary-discount">
+                  <span>Discount ({discount.code} — {discount.label})</span>
+                  <span>−${savings.toFixed(2)}</span>
+                </div>
+              )}
+
               <div className="checkout-summary-total">
                 <span>Total</span>
                 <span>${total.toFixed(2)}</span>
               </div>
             </div>
 
+            {/* Discount code */}
+            <div className="checkout-discount">
+              <label className="checkout-discount-label">Discount code</label>
+              {discount ? (
+                <div className="checkout-discount-applied">
+                  <span className="discount-badge">{discount.code} — {discount.label}</span>
+                  <button type="button" className="discount-remove-btn" onClick={removeCode}>Remove</button>
+                </div>
+              ) : (
+                <div className="checkout-discount-row">
+                  <input
+                    type="text"
+                    value={codeInput}
+                    onChange={e => { setCodeInput(e.target.value); setCodeError(''); }}
+                    onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), applyCode())}
+                    placeholder="Enter code"
+                    className={codeError ? 'input-error' : ''}
+                  />
+                  <button type="button" className="discount-apply-btn" onClick={applyCode}>
+                    Apply
+                  </button>
+                </div>
+              )}
+              {codeError && <span className="field-error">{codeError}</span>}
+            </div>
+
+            {/* Checkout form */}
             <form className="checkout-form" onSubmit={handleSubmit} noValidate>
               <div className="checkout-field">
                 <label htmlFor="co-name">Full name</label>
