@@ -65,20 +65,18 @@ function App() {
   }
 
   function removeFromCart(productId) {
-    setCart(prev => {
-      const item = prev.find(i => i.product.id === productId);
-      if (!item) return prev;
+    const item = cart.find(i => i.product.id === productId);
+    if (!item) return;
 
-      setProducts(prevProducts =>
-        prevProducts.map(p =>
-          p.id === productId
-            ? { ...p, stock: p.stock + item.quantity }
-            : p
-        )
-      );
+    setProducts(prev =>
+      prev.map(p =>
+        p.id === productId
+          ? { ...p, stock: p.stock + item.quantity }
+          : p
+      )
+    );
 
-      return prev.filter(i => i.product.id !== productId);
-    });
+    setCart(prev => prev.filter(i => i.product.id !== productId));
   }
 
   function toggleWishlist(productId) {
