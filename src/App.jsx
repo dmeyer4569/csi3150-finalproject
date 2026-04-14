@@ -6,6 +6,7 @@ import FilterBar from './components/FilterBar';
 import ProductGrid from './components/ProductGrid';
 import QuickViewModal from './components/QuickViewModal';
 import CartDrawer from './components/CartDrawer';
+import CheckoutModal from './components/CheckoutModal';
 import Wishlist from './components/Wishlist';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
   // Local UI state — not shared, lives only here
   const [cartOpen, setCartOpen] = useState(false);
   const [wishlistOpen, setWishlistOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   // ── Wishlist localStorage sync ─────────────────────────────────────────────
 
@@ -91,6 +93,10 @@ function App() {
     setQuickViewProduct(product);
   }
 
+  function clearCart() {
+    setCart([]);
+  }
+
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
@@ -128,7 +134,16 @@ function App() {
         <CartDrawer
           cart={cart}
           removeFromCart={removeFromCart}
+          onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }}
           onClose={() => setCartOpen(false)}
+        />
+      )}
+
+      {checkoutOpen && (
+        <CheckoutModal
+          cart={cart}
+          onConfirm={clearCart}
+          onClose={() => setCheckoutOpen(false)}
         />
       )}
 

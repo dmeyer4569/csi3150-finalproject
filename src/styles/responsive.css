@@ -1,0 +1,26 @@
+/* ── Responsive ────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+
+  .main-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .drawer-content {
+    width: 100vw;
+  }
+
+  .cart-item,
+  .wishlist-item {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+}

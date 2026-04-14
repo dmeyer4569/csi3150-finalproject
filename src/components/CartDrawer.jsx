@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CartDrawer({ cart, removeFromCart, onClose }) {
+function CartDrawer({ cart, removeFromCart, onCheckout, onClose }) {
   const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
   return (
@@ -11,7 +11,7 @@ function CartDrawer({ cart, removeFromCart, onClose }) {
           <button onClick={onClose}>✕</button>
         </div>
         {cart.length === 0 ? (
-          <p>Your cart is empty.</p>
+          <p className="drawer-empty">Your cart is empty.</p>
         ) : (
           <>
             <ul className="cart-list">
@@ -25,6 +25,9 @@ function CartDrawer({ cart, removeFromCart, onClose }) {
               ))}
             </ul>
             <div className="cart-total">Total: ${total.toFixed(2)}</div>
+            <button className="cart-checkout-btn" onClick={onCheckout}>
+              Checkout
+            </button>
           </>
         )}
       </div>
