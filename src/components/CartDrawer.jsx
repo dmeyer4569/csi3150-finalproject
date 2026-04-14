@@ -33,7 +33,7 @@ function CartDrawer({ cart, removeFromCart, onCheckout, onClose }) {
                 <span>${subtotal.toFixed(2)}</span>
               </div>
               <div className="cart-pricing-row">
-                <span>Tax (8%)</span>
+                <span>Tax (6%)</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
               <div className="cart-pricing-row cart-pricing-total">
